@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  --color-tg-bg: #0e1621;
+  --color-tg-header: #17212b;
+  --color-tg-blue: #24a1de;
+  --color-tg-cyan: #00cbd6;
+  --color-tg-text: #f5f6f7;
+  --color-tg-muted: #7e8b98;
+  --color-tg-border: #2c3a47;
+  --color-glass-card: rgba(23, 33, 43, 0.75);
+  --color-glass-bg: rgba(14, 22, 33, 0.6);
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+:root {
+  --background: #0e1621;
+  --foreground: #f5f6f7;
+}
+
+body {
+  background-color: #0e1621;
+  color: #f5f6f7;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Premium Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0e1621;
+}
+::-webkit-scrollbar-thumb {
+  background: #2c3a47;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #24a1de;
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+  background: rgba(23, 33, 43, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-panel-hover:hover {
+  background: rgba(23, 33, 43, 0.85);
+  border-color: rgba(36, 161, 222, 0.25);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.glass-input {
+  background: rgba(14, 22, 33, 0.8);
+  border: 1px solid #2c3a47;
+  color: #f5f6f7;
+  transition: all 0.2s ease;
+}
+.glass-input:focus {
+  border-color: #24a1de;
+  box-shadow: 0 0 0 2px rgba(36, 161, 222, 0.2);
+  outline: none;
+}
+
+/* Shimmer/Skeleton Effect */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(44, 58, 71, 0.3) 25%,
+    rgba(44, 58, 71, 0.6) 50%,
+    rgba(44, 58, 71, 0.3) 75%
+  );
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
