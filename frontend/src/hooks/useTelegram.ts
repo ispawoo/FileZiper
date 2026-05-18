@@ -46,9 +46,13 @@ export function useTelegram() {
     }
   }, []);
 
-  const triggerHaptic = (type: 'success' | 'error' | 'warning' = 'success') => {
+  const triggerHaptic = (type: 'success' | 'error' | 'warning' | 'light' | 'medium' | 'heavy' | 'rigid' | 'soft' = 'success') => {
     if (webApp?.HapticFeedback) {
-      webApp.HapticFeedback.notificationOccurred(type);
+      if (type === 'success' || type === 'error' || type === 'warning') {
+        webApp.HapticFeedback.notificationOccurred(type);
+      } else {
+        webApp.HapticFeedback.impactOccurred(type);
+      }
     }
   };
 
