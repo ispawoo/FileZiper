@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  # Express Backend & Telegram Bot service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fileziper-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - NODE_ENV=development
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_MINI_APP_URL=http://localhost:3000
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - SUPABASE_STORAGE_BUCKET=${SUPABASE_STORAGE_BUCKET:-fileziper}
+      - BYPASS_TG_AUTH=true
+      - MOCK_USER_ID=123456789
+    volumes:
+      - ./backend/temp:/app/temp
+    restart: always
+
+  # Next.js Frontend Mini App
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: fileziper-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_BACKEND_URL=http://localhost:3001
+    depends_on:
+      - backend
+    restart: always
