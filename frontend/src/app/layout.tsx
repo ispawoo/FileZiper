@@ -40,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${outfit.variable} dark h-full antialiased`}>
+    <html lang="en" className={`${outfit.variable} dark h-full antialiased`} suppressHydrationWarning>
       <head>
         {/* Load Telegram WebApp SDK Script BEFORE interactive components load */}
         <Script
@@ -48,7 +48,7 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
       </head>
-      <body className="min-h-full bg-tg-bg text-tg-text font-sans antialiased flex flex-col">
+      <body className="min-h-full bg-tg-bg text-tg-text font-sans antialiased flex flex-col" suppressHydrationWarning>
         <main className="flex-1 flex flex-col">
           {children}
         </main>
