@@ -84,7 +84,6 @@ router.post('/', validateTelegramAuth, upload.array('files'), async (req: Authen
         original_files: originalFiles,
         zip_name: finalZipName,
         zip_size: 0,
-        download_count: 0,
         compression_percentage: 0,
         expires_at: expiresAt,
         created_at: new Date().toISOString(),
