@@ -213,3 +213,4 @@ Most compression nodes crash on large operations because they pull files complet
 Built with ❤️ by **Yasir Ispawoo**  
 🌐 [GitHub Profile](https://github.com/ispawoo)  
 💻 Project Repository: `@FileZiper_bot`
+

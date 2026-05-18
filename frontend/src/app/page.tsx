@@ -12,7 +12,6 @@ import {
   Settings, 
   ShieldCheck, 
   Download, 
-  Share2, 
   Copy, 
   FileCode, 
   FileAudio, 
@@ -20,7 +19,6 @@ import {
   FileImage, 
   FileText as FileIcon, 
   AlertCircle, 
-  HelpCircle,
   Clock,
   Sparkles,
   Database,
@@ -30,7 +28,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useTelegram } from '../hooks/useTelegram';
-import { uploadFiles, getJobStatus, getHistory, JobStatusResponse } from '../services/api';
+import { uploadFiles, getJobStatus, getHistory, JobStatusResponse, HistoryResponse } from '../services/api';
 
 type Tab = 'home' | 'upload' | 'progress' | 'download' | 'history' | 'settings' | 'privacy' | 'error';
 
@@ -43,7 +41,6 @@ export default function FileZiperApp() {
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   
   // Job and polling states
-  const [jobId, setJobId] = useState<string | null>(null);
   const [jobStatus, setJobStatus] = useState<string | null>(null);
   const [compressionProgress, setCompressionProgress] = useState<number>(0);
   const [finalZipName, setFinalZipName] = useState<string>('');
@@ -52,7 +49,7 @@ export default function FileZiperApp() {
   const [jobExpiresAt, setJobExpiresAt] = useState<string>('');
   
   // History states
-  const [historyJobs, setHistoryJobs] = useState<any[]>([]);
+  const [historyJobs, setHistoryJobs] = useState<HistoryResponse['jobs']>([]);
   const [historyMetrics, setHistoryMetrics] = useState({ totalJobs: 0, totalFilesCompressed: 0, totalStorageUsed: 0 });
   const [isLoadingHistory, setIsLoadingHistory] = useState<boolean>(false);
 
@@ -173,15 +170,15 @@ export default function FileZiperApp() {
       });
 
       if (response.success && response.jobId) {
-        setJobId(response.jobId);
         startPollingJobStatus(response.jobId);
       } else {
         throw new Error('Upload succeeded but server did not return a Job ID.');
       }
 
-    } catch (err: any) {
+    } catch (err) {
       triggerHaptic('error');
-      setErrorMessage(err.message || 'An error occurred during file upload.');
+      const errorMsg = err instanceof Error ? err.message : 'An error occurred during file upload.';
+      setErrorMessage(errorMsg);
       setActiveTab('error');
     }
   };
@@ -225,7 +222,7 @@ export default function FileZiperApp() {
           setActiveTab('error');
           triggerHaptic('error');
         }
-      } catch (err: any) {
+      } catch (err) {
         console.error('Polling error:', err);
       }
     }, 1500); // Poll every 1.5 seconds
@@ -239,7 +236,7 @@ export default function FileZiperApp() {
       const response = await getHistory(authHeader);
       setHistoryJobs(response.jobs);
       setHistoryMetrics(response.metrics);
-    } catch (err: any) {
+    } catch (err) {
       console.error('Failed to load history:', err);
     } finally {
       setIsLoadingHistory(false);
@@ -248,8 +245,12 @@ export default function FileZiperApp() {
 
   useEffect(() => {
     if (activeTab === 'history') {
-      fetchHistory();
+      const timer = setTimeout(() => {
+        fetchHistory();
+      }, 0);
+      return () => clearTimeout(timer);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
   // Copy zip link
@@ -281,12 +282,13 @@ export default function FileZiperApp() {
         {user && (
           <div className="flex items-center gap-2 bg-glass-card/30 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/5">
             {user.photo_url ? (
-              <img 
-                src={user.photo_url} 
-                alt={user.first_name} 
-                className="w-6 h-6 rounded-full border border-tg-cyan/40"
-              />
-            ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img 
+              src={user.photo_url} 
+              alt={user.first_name} 
+              className="w-6 h-6 rounded-full border border-tg-cyan/40"
+            />
+          ) : (
               <div className="w-6 h-6 rounded-full bg-tg-blue/40 flex items-center justify-center font-bold text-xs border border-tg-blue/40">
                 {user.first_name[0]}
               </div>

@@ -25,22 +25,24 @@ export function useTelegram() {
       // Expand the webapp to full height
       tg.expand();
 
-      setWebApp(tg);
-      setInitData(tg.initData || '');
-      setPlatform(tg.platform || 'browser');
-      
-      if (tg.initDataUnsafe?.user) {
-        setUser(tg.initDataUnsafe.user);
-      } else if (process.env.NODE_ENV === 'development') {
-        // Fallback for local browser testing
-        setUser({
-          id: 123456789,
-          first_name: 'Yasir',
-          last_name: 'Ispawoo',
-          username: 'ispawoo',
-          is_premium: true,
-        });
-      }
+      setTimeout(() => {
+        setWebApp(tg);
+        setInitData(tg.initData || '');
+        setPlatform(tg.platform || 'browser');
+        
+        if (tg.initDataUnsafe?.user) {
+          setUser(tg.initDataUnsafe.user);
+        } else if (process.env.NODE_ENV === 'development') {
+          // Fallback for local browser testing
+          setUser({
+            id: 123456789,
+            first_name: 'Yasir',
+            last_name: 'Ispawoo',
+            username: 'ispawoo',
+            is_premium: true,
+          });
+        }
+      }, 0);
     }
   }, []);
 

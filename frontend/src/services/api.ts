@@ -87,14 +87,14 @@ export function uploadFiles(
         try {
           const response = JSON.parse(xhr.responseText);
           resolve(response as UploadResponse);
-        } catch (e) {
+        } catch {
           reject(new Error('Invalid response from upload server.'));
         }
       } else {
         try {
           const errResponse = JSON.parse(xhr.responseText);
           reject(new Error(errResponse.error || `Upload failed with status ${xhr.status}`));
-        } catch (e) {
+        } catch {
           reject(new Error(`Upload failed with status ${xhr.status}`));
         }
       }
