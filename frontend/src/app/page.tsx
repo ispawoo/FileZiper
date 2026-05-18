@@ -34,6 +34,13 @@ type Tab = 'home' | 'upload' | 'progress' | 'download' | 'history' | 'settings' 
 export default function FileZiperApp() {
   const { user, getAuthHeader, triggerHaptic, showAlert } = useTelegram();
   const [activeTab, setActiveTab] = useState<Tab>('home');
+  const [mounted, setMounted] = useState<boolean>(false);
+  
+  useEffect(() => {
+    setTimeout(() => {
+      setMounted(true);
+    }, 0);
+  }, []);
   const [files, setFiles] = useState<File[]>([]);
   const [zipName, setZipName] = useState<string>('');
   const [isDragActive, setIsDragActive] = useState<boolean>(false);
@@ -260,6 +267,10 @@ export default function FileZiperApp() {
     triggerHaptic('success');
     setTimeout(() => setCopied(false), 2000);
   };
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className="flex-1 flex flex-col max-w-md w-full mx-auto px-4 pb-20 pt-6">
