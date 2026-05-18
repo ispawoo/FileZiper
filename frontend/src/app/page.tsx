@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  FolderZip, 
+  FolderArchive, 
   UploadCloud, 
   FileText, 
   Trash2, 
@@ -269,7 +269,7 @@ export default function FileZiperApp() {
       <header className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-2">
           <div className="p-2.5 bg-gradient-to-tr from-tg-blue to-tg-cyan rounded-xl shadow-lg animate-float">
-            <FolderZip className="w-6 h-6 text-white" />
+            <FolderArchive className="w-6 h-6 text-white" />
           </div>
           <div>
             <h1 className="font-extrabold text-xl leading-none text-transparent bg-clip-text bg-gradient-to-r from-white to-tg-cyan">
@@ -497,7 +497,7 @@ export default function FileZiperApp() {
                     onClick={startCompression}
                     className="mt-2 w-full flex items-center justify-center gap-2 bg-gradient-to-r from-tg-blue to-tg-cyan text-white font-extrabold px-6 py-3.5 rounded-2xl shadow-xl shadow-tg-blue/20 hover:scale-[1.01] active:scale-95 transition-all"
                   >
-                    Compress Now ({files.length} Files) <FolderZip className="w-5 h-5" />
+                    Compress Now ({files.length} Files) <FolderArchive className="w-5 h-5" />
                   </button>
                 </div>
               )}
@@ -521,7 +521,7 @@ export default function FileZiperApp() {
                 <div className="w-24 h-24 rounded-full border border-tg-cyan/20 animate-spin absolute" style={{ animationDuration: '6s' }} />
                 
                 <div className="w-20 h-20 rounded-full bg-glass-card border border-tg-border flex items-center justify-center relative z-10">
-                  <FolderZip className="w-10 h-10 text-tg-cyan animate-pulse" />
+                  <FolderArchive className="w-10 h-10 text-tg-cyan animate-pulse" />
                 </div>
               </div>
 
@@ -628,7 +628,7 @@ export default function FileZiperApp() {
               {/* Bot chat notice */}
               <div className="glass-panel rounded-2xl p-4 flex gap-3 items-center">
                 <div className="p-2 bg-tg-blue/20 rounded-xl">
-                  <FolderZip className="w-6 h-6 text-tg-blue" />
+                  <FolderArchive className="w-6 h-6 text-tg-blue" />
                 </div>
                 <div className="min-w-0">
                   <h4 className="text-xs font-bold text-white">Sent directly to Chat!</h4>
@@ -685,7 +685,7 @@ export default function FileZiperApp() {
               {/* Metrics Panels */}
               <div className="grid grid-cols-3 gap-3">
                 <div className="glass-panel rounded-2xl p-3 text-center flex flex-col gap-0.5 shadow-lg">
-                  <FolderZip className="w-4.5 h-4.5 text-tg-blue mx-auto mb-1" />
+                  <FolderArchive className="w-4.5 h-4.5 text-tg-blue mx-auto mb-1" />
                   <span className="text-[9px] font-bold text-tg-muted uppercase tracking-wide">Total ZIPs</span>
                   <span className="text-base font-black text-white">{historyMetrics.totalJobs}</span>
                 </div>
@@ -933,7 +933,7 @@ export default function FileZiperApp() {
             activeTab === 'home' || activeTab === 'privacy' ? 'text-tg-blue scale-105' : 'text-tg-muted hover:text-white'
           }`}
         >
-          <FolderZip className="w-5 h-5" />
+          <FolderArchive className="w-5 h-5" />
           <span className="text-[10px] font-bold uppercase tracking-wider">Home</span>
         </button>
 
