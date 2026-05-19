@@ -70,6 +70,9 @@ export default function RootLayout({
           src="https://telegram.org/js/telegram-web-app.js"
           strategy="beforeInteractive"
         />
+        
+        {/* Monetization Ad Tag */}
+        <script async src="//libtl.com/sdk.js" data-zone="11025245" data-sdk="show_11025245"></script>
       </head>
       <body className="min-h-full bg-tg-bg text-tg-text font-sans antialiased flex flex-col" suppressHydrationWarning>
         <main className="flex-1 flex flex-col">
