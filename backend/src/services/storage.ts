@@ -40,13 +40,12 @@ export async function uploadZipToStorage(localFilePath: string, storageFileName:
   // Ensure the bucket exists first
   await ensureBucketExists();
 
-  const fileStream = fs.createReadStream(localFilePath);
+  const fileBuffer = fs.readFileSync(localFilePath);
   
   const { data, error } = await supabase.storage
     .from(BUCKET_NAME)
-    .upload(storageFileName, fileStream, {
+    .upload(storageFileName, fileBuffer, {
       contentType: 'application/zip',
-      duplex: 'drain',
       upsert: true,
     });
 
