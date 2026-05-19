@@ -154,15 +154,7 @@ async function runBackgroundCompression(
     // Generate signed download URL (1 hour)
     const downloadUrl = await getSignedDownloadUrl(storagePath, 3600);
 
-    // 3. Send ZIP directly to User's Telegram chat via Bot
-    let telegramMessageId: number | null = null;
-    try {
-      telegramMessageId = await sendZipToUser(userId, localZipPath, zipName);
-    } catch (botError) {
-      console.error(`Telegram Bot was unable to send file directly to user ${userId}:`, botError);
-    }
-
-    // 4. Update job in database to 'completed'
+    // 3. Update job in database to 'completed' IMMEDIATELY for instant UX
     const { error: finalUpdateError } = await supabase
       .from('zip_jobs')
       .update({
@@ -170,7 +162,6 @@ async function runBackgroundCompression(
         zip_size: finalZipSize,
         zip_path: storagePath,
         download_url: downloadUrl,
-        telegram_message_id: telegramMessageId,
         compression_percentage: 100,
       })
       .eq('id', jobId);
@@ -179,22 +170,25 @@ async function runBackgroundCompression(
       console.error(`Error finalising job ${jobId} in DB:`, finalUpdateError.message);
     }
 
-    // 5. Cleanup local temp files
-    console.log(`Cleaning up local temporary files for job ${jobId}...`);
-    
-    // Clean original files
-    for (const file of originalFiles) {
-      if (fs.existsSync(file.tempPath)) {
-        fs.unlinkSync(file.tempPath);
-      }
-    }
-    
-    // Clean local generated ZIP file
-    if (fs.existsSync(localZipPath)) {
-      fs.unlinkSync(localZipPath);
-    }
-
-    console.log(`Job ${jobId} finished and local storage cleared.`);
+    // 4. Send ZIP to Telegram in background (no await) so frontend isn't blocked
+    sendZipToUser(userId, localZipPath, zipName)
+      .then(async (telegramMessageId) => {
+        if (telegramMessageId) {
+          await supabase.from('zip_jobs').update({ telegram_message_id: telegramMessageId }).eq('id', jobId);
+        }
+      })
+      .catch((botError) => {
+        console.error(`Telegram Bot was unable to send file directly to user ${userId}:`, botError);
+      })
+      .finally(() => {
+        // 5. Cleanup local temp files AFTER Telegram finishes
+        console.log(`Cleaning up local temporary files for job ${jobId}...`);
+        for (const file of originalFiles) {
+          if (fs.existsSync(file.tempPath)) fs.unlinkSync(file.tempPath);
+        }
+        if (fs.existsSync(localZipPath)) fs.unlinkSync(localZipPath);
+        console.log(`Job ${jobId} completely finished and local storage cleared.`);
+      });
 
   } catch (err: any) {
     console.error(`Error in background zipping job ${jobId}:`, err);
