@@ -24,7 +24,7 @@ export function compressFiles(
 
     const output = fs.createWriteStream(outputPath);
     const archive = archiver('zip', {
-      zlib: { level: 9 }, // Maximum compression level
+      zlib: { level: 1 }, // Fastest compression level for better UX
     });
 
     const totalBytes = files.reduce((sum, f) => sum + f.size, 0);
@@ -87,6 +87,10 @@ export function compressFiles(
       // We can use the file.name which might contain folders (e.g. "folder/subfolder/file.png")
       archive.file(file.tempPath, { name: file.name });
     }
+
+    // Add auto-credit text file
+    const creditsText = `Thank you for using FileZiper!\n\nThis archive was securely generated using the Premium Compressor engine.\n\n📱 Telegram Bot: @FileZiper_bot\n🌐 Web App: https://fileziper.vercel.app\n\nEnjoy your compressed files!`;
+    archive.append(creditsText, { name: 'FileZiper_Credits.txt' });
 
     archive.finalize();
   });
