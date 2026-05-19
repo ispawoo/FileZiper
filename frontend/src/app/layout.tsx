@@ -73,6 +73,29 @@ export default function RootLayout({
         
         {/* Monetization Ad Tag */}
         <script async src="//libtl.com/sdk.js" data-zone="11025245" data-sdk="show_11025245"></script>
+        
+        {/* Initialize In-App Interstitial automatically */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              let adInterval = setInterval(() => {
+                if (typeof window !== 'undefined' && typeof window.show_11025245 === 'function') {
+                  clearInterval(adInterval);
+                  window.show_11025245({
+                    type: 'inApp',
+                    inAppSettings: {
+                      frequency: 2,
+                      capping: 0.1,
+                      interval: 30,
+                      timeout: 5,
+                      everyPage: false
+                    }
+                  }).catch(e => console.log('InApp Ad error:', e));
+                }
+              }, 1000);
+            `,
+          }}
+        />
       </head>
       <body className="min-h-full bg-tg-bg text-tg-text font-sans antialiased flex flex-col" suppressHydrationWarning>
         <main className="flex-1 flex flex-col">

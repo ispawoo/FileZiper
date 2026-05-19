@@ -161,6 +161,16 @@ export default function FileZiperApp() {
     if (files.length === 0) return;
 
     triggerHaptic('medium');
+
+    // Show Rewarded Ad before starting the heavy lifting
+    try {
+      if (typeof window !== 'undefined' && (window as any).show_11025245) {
+        await (window as any).show_11025245('pop');
+      }
+    } catch (e) {
+      console.log('Ad skipped or failed', e);
+    }
+
     setActiveTab('progress');
     setUploadProgress(0);
     setCompressionProgress(0);
