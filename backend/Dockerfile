@@ -1,40 +1,37 @@
 # Build Stage
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-# Install package manager
-RUN npm install -g pnpm
+# Install package manager (npm is already installed)
 
-COPY package.json pnpm-lock.yaml* ./
+COPY package.json ./
 
-RUN pnpm install --frozen-lockfile --ignore-scripts
+RUN npm install --ignore-scripts
 
 COPY tsconfig.json ./
 COPY src ./src
 
-RUN pnpm build
+RUN npm run build
 
 # Production Stage
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 
 WORKDIR /app
 
-RUN npm install -g pnpm
-
-COPY package.json pnpm-lock.yaml* ./
+COPY package.json ./
 
 # Install only production dependencies
-RUN pnpm install --prod --frozen-lockfile --ignore-scripts
+RUN npm install --omit=dev --ignore-scripts
 
 COPY --from=builder /app/dist ./dist
 
 # Create folders for temporary uploads and zips
 RUN mkdir -p temp/uploads temp/zips
 
-EXPOSE 3001
+EXPOSE 7860
 
 ENV NODE_ENV=production
-ENV PORT=3001
+ENV PORT=7860
 
 CMD ["node", "dist/index.js"]
