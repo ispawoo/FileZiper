@@ -164,7 +164,9 @@ export default function FileZiperApp() {
 
     // Show Rewarded Ad before starting the heavy lifting
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (typeof window !== 'undefined' && (window as any).show_11025245) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await (window as any).show_11025245('pop');
       }
     } catch (e) {
