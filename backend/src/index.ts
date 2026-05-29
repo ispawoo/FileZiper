@@ -44,6 +44,15 @@ app.get('/health', (req, res) => {
 app.use('/api/upload', uploadRouter);
 app.use('/api/jobs', jobsRouter);
 
+// Serve static frontend files
+const frontendPath = path.join(process.cwd(), '../frontend/out');
+app.use(express.static(frontendPath));
+
+// Fallback for client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
+
 // Start server and dependencies
 async function bootstrap() {
   try {

@@ -1,3 +1,11 @@
+---
+title: FileZiper
+emoji: ⚡
+colorFrom: blue
+colorTo: purple
+sdk: docker
+app_port: 7860
+---
 # ⚡ FileZiper ⚡
 
 FileZiper is a complete, production-ready, high-performance Telegram Web Mini App + Telegram Bot that allows users to upload multiple files of any type, compress them into a single high-compression ZIP archive, download it instantly via a premium glassmorphic UI, or receive the ZIP binary directly in their Telegram chat.
