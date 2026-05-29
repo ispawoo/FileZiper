@@ -5,7 +5,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const MINI_APP_URL = process.env.TELEGRAM_MINI_APP_URL || 'https://fileziper-mini-app.vercel.app';
+let MINI_APP_URL = process.env.TELEGRAM_MINI_APP_URL || 'https://fileziper-mini-app.vercel.app';
+
+if (MINI_APP_URL && !MINI_APP_URL.startsWith('http')) {
+  MINI_APP_URL = 'https://' + MINI_APP_URL;
+}
 
 if (!BOT_TOKEN) {
   console.warn('Warning: TELEGRAM_BOT_TOKEN is missing. Telegram bot features will not work.');
